@@ -1,0 +1,53 @@
+---GUIDE DE REFERENCE---
+
+Code : rapfire.py
+
+------------------------
+
+- Première fonction: replace_all(text, dict)
+  Cette fonction prend en paramètre une chaine de caractère et un dictionnaire dont les clés sont les caractères à supprimer et dont les valeurs sont les caractères que l'on veut à la place.
+  Elle renvoie ensuite la chaine de caractère modifiée. Cette fonction sert à nettoyer les string récupérées par scraping contenant des caractères indésirables dus à la conversion en objet python.
+  
+- Deuxième fonction (fonction principale): scraping(pages)
+  C'est la fonction principale du projet. Elle permet de scraper les pages du domaines www.hotneawhiphop.com/videos/ dans le but de récuperer dans un premier temps:
+  - les noms des artistes
+  - les titres des musiques
+  - les liens vers la page du site contenant la vidéo correspondante et un article/court descriptif de la vidéo
+  Ces liens contenant la vidéo youtube "embarquée", nous allons donc récuperer le lien de cette vidéo "embarquée" et le nettoyer pour obtenir le lien vidéo vers youtube directement.
+  Enfin, après cela, on scrape chaque lien youtube pour obtenir le nombre de vues, de likes et de commentaires correspondant à chaque musique.
+  Après un nettoyage des données, on va mettre ces données dans un dataframe pour qu'elles soient ordonnées et pour pouvoir les stocker ensuite dans une base de données mongodb.
+  
+  'for i in range(pages):' c'est la boucle principale de la fonction, le i correspond a l'indice de la page du site qui se fait scraper et pages = nombre de pages que l'utilisateur veut scraper. 
+  Ce nombre est à rentrer dans le champs de texte correspondant qui apparait quelques instants après avoir executé le script dans un terminal. Nous vous conseillons de ne scraper qu'une page car cela 
+  prend déjà pas mal de temps (10 à 15 min). 
+  
+  Dans un premier temps, on utilise BeautifulSoup pour scraper toutes les données que nous voulons récupérer sur le site hotneawhiphop:
+        url = f'{base_url}{i}' # permet au driver de récupérer les liens et de naviguer sur les différentes pages de vidéos du site 
+        response = requests.get(url = url, headers=userAgent) # récupération de la réponse html de chaque page
+        page = response.content  # récupération du ocntenant html de la page 
+        soup = BeautifulSoup(page, "html.parser")  # conversion du ocntenu html en objet objet python 
+        La méthode " soup.find_all('<NOM DE LA BALISE/TAG>', {'<class/attribut': '<NOM DE LA CLASSE/ATTRIBUT>'}) " permet de récupérer chaque élément de la page correspondant à la balise html dont la classe est précisée.
+		On obtient les noms des balises et des classes en inspectant le code source de la page (ou de l'élément précis) sur notre navigateur.
+		Ces éléments sont stockés dans une liste que nous parcourons ensuite pour en extraire les chaines de caractères qui sont les données que nous voulons, qu'on met dans une liste.
+  
+  Ensuite, après avoir récupéré les premières données dont le lien vers la vidéo youtube, on scrape ces liens pour obtenir le nombre de vues, de likes et de commentaires qui correspond à chaque vidéo. 
+  Ces éléments ne font pas partie du code source de chaque page youtube correspondante car ils osnt générés dynamiquement par un code javascript, beautifulsoup ne peut donc pas aider à récupérer ces éléments
+  car il n'execute pas de code javascript. Pour palier ce problème, nous utilisons le driver Chrome du package Python selenium qui permet d'instancier un navigateur (ici sans entete) et de le controler.
+  
+	   for i in yt_link_list: #pour chaque lien url contenu dans yt_link_list
+			url = i  # la variable url prend la valeur de ce lien
+			chrome.get(url) # récupération du contenu html de la page youtube correspondante
+			chrome.execute_script("window.scrollTo(0, 500);")  # défilement vers le bas de la page 
+			time.sleep(5)      # le driver fait une pause dans le défilement
+			chrome.execute_script("window.scrollTo(1, 3000);")  #re-défilement (on execute ce défilement de page car les commentaires et certaines données javascript ne sont chargées qu'àprès défilement)
+  La fonction 'chrome.find_element_by_class_name("<NOM DE CLASSE>") ' permet de récupérer un élément grâce à sa classe.
+
+- Troisième fonction: mongodb(df)
+  Cette fonction prend en pramètre un dataframe. Elle crée la base de données "Musique" dans mongo et la collection "Clips" dans celle-ci, puis ajoute le dataframe en temps que nouveau
+  document de la collection.
+  
+- Quatrème fonction: search(requete, df)
+  Fonction de recherche qui prend en paramètre une requete et un dataframe. Elle permet de faire des requêtes sur notre base de donnée selon les artistes ou les titres des clips grâce elasticsearch.
+  
+- Cinquième fonction: index()
+  Permet de mettre à jour la page selon la requête effectuée 
