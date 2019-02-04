@@ -1,0 +1,32 @@
+body {
+  color: #161616;
+  font-family: 'Roboto', sans-serif;
+  background-color: #F5F5DC;
+}
+
+h1 {
+  text-align: center;
+  color:#FF0000;
+}
+
+button{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  outline: 0;
+  box-shadow: none;
+  border: 0 !important;
+  background: #2c3e50;
+  background-image: none;
+  width: 100px;
+  height: 20px;
+  margin: 0;
+  margin-top: 20px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: .25em;
+}
+.button:hover{
+  color: #f39c12;
+}

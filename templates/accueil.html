@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>RapFire</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}">
+    </head>
+
+    <body>
+        <h1>RAPFIRE</h1>
+		<h2>Présentation</h2>
+		RapFire vous fait découvrir les nouveaux clips de Rap US et vous indique leurs popularités.
+		<h2>Clips RAP US</h2>
+		<h3>Recherche d'artiste ou de titre<h3>
+		<div>
+            <h4>Appuyez sur entrée pour valider la recherche</h4>
+            <form action="/" method="post">
+				<input type="text" name="requete"/> <button type= "submit" >Rechercher</button>
+            </form>
+        </div>
+		<div>
+			{{data_frame | safe}}
+		</div>
+		<a href="/"> Revenir à l'accueil </a>
+    </body>
+</html>
