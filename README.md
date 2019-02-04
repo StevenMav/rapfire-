@@ -18,12 +18,13 @@ Packages: - pymongo
           - time
           - pandas
           - numpy
-		  - bs4
-		  - selenium
-		  - flask
+          - bs4
+          - selenium
+	  - flask
 		  
 Logiciels (installer et mettre à la racine du projet): - elasticsearch-6 https://www.elastic.co/fr/products/elasticsearch
-                                                       - driver Chrome https://sites.google.com/a/chromium.org/chromedriver/downloads
+                                                       
+						       - driver Chrome https://sites.google.com/a/chromium.org/chromedriver/downloads
 
 Instructions 
 ************
