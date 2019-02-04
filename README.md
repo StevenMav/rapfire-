@@ -29,7 +29,7 @@ Instructions
 ************
 - Tout d'abord, lancer elasticsearch.bat contenu dans le dossier elasticsearch-6.5.4
 - Lancer le programme python rapfire.py dans un terminal à l'aide de la commande 'python rapfire.py' en se plaçant dans le répertoire du projet
-- Le scrapping se faisant automatiquement, cela prend du temps donc nous avons réduit le scraping à la 1ere page de clips du site seulement (60 vidéos, environ 10-15 min).
+- Le scrapping se faisant automatiquement, cela prend du temps donc lorsqu'il vous sera demandé combien de pages vous voulez scraper nous vous conseillons de taper 1 (= 60 vidéos, environ 10-15 min).
 - Sur un navigateur, ouvrez l'interface Flask sur http://127.0.0.1:5000/ 
 
 Fonctionnement
